@@ -1,7 +1,8 @@
 /*
   Höfundur: Samúel Þór Hjaltalín Guðjónsson
   samuel@ulfr.net
-  Var upprunalega sveinsprófsverkefni í SMÍH Raftækniskólanum vorönn 2018.
+  * Útgáfa 2021-02-01
+  * 
   Stutt lýsing:
     Forritið stýrir 6rása mosfet útgangsrás, snertiskjá og les einnig frá einum
     hitanema og einum þrýstinema. Gildin birtir það svo á skjánum.
@@ -53,6 +54,8 @@
       * minni nákvæmni á hærri þrýsting
       * Setja dekk sem lendir reglulega í "warningcheck" á sérstaka gjörgæslu (mæla oftar)
 
+      * Libraries í notkun
+      * TouchScreen.h: 
 
 
 */
