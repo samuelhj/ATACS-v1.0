@@ -55,7 +55,7 @@
       * Setja dekk sem lendir reglulega í "warningcheck" á sérstaka gjörgæslu (mæla oftar)
 
       * Libraries í notkun
-      * TouchScreen.h: 
+      * TouchScreen.h: Lína 12 í TouchScreen.h, bæta við ||defined(__AVR_ATmega1284P__)
       * 
 
 
@@ -66,13 +66,14 @@
 #include <EEPROM.h> // Við þurfum library til að skrifa og lesa EEPROM.
 
 #include "TouchScreen.h" // Við þurfum library til að lesa snertingu af skjá.
-#include <Adafruit_GFX.h> // Við þurfum library til að teikna á skjá.
-#include <Adafruit_ILI9341.h> // Við þurfum library til að tala við ILI9341 stýringu á skjá.
+#include "Adafruit_GFX.h" // Við þurfum library til að teikna á skjá.
+#include "Adafruit_ILI9341.h" // Við þurfum library til að tala við ILI9341 stýringu á skjá.
+#include <Adafruit_I2CDevice.h>
 
 // fastar sem eru bundnir við þetta tiltekna tæki.
 //#define SERIALNUMBER "003" // Þetta ætti að vera lesið úr EEPROM...
-#define VERSION "v1.2"
-#define BUILDDATE "2020-03-08"
+#define VERSION "v1.3"
+#define BUILDDATE "2021-04-27"
 #define CALIBRATE ON // Ef calibrate er ON þá keyrir bara calibrate lúppan.
 
 // Hér skilgreinum við fasta sem breytast ekki.
@@ -225,7 +226,7 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC); // Skilgreining fyrir I
 #define PINK        0xF81F
 
 // Skilgreinum global breytur
-bool debug = true; // breyta í true fyrir debug
+bool debug = false; // breyta í true fyrir debug
 
 float selectedPressure = 0.00f; // Valinn þrýstingur.
 float selectedPressure_LRT = 0.00f;
@@ -422,7 +423,7 @@ void adjustAllTires()
 
     if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
     {
-      updateBaseValue(); // Uppfærum mælingu á kistu
+      //updateBaseValue(); // Uppfærum mælingu á kistu
       previousMillis2 = millis(); // Endurstillum teljarann
     }
 
@@ -469,7 +470,7 @@ void adjustAllTires()
 
         if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
         {
-          updateBaseValue(); // Uppfærum mælingu á kistu
+         // updateBaseValue(); // Uppfærum mælingu á kistu
           previousMillis2 = millis(); // Endurstillum teljarann
 
         }
@@ -532,7 +533,7 @@ void adjustLRT()
     // Mælum þrýsting á kistu
     if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
     {
-      updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+     // updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
       previousMillis2 = millis(); // Endurstillum teljarann
     }
 
@@ -555,7 +556,7 @@ void adjustLRT()
         // Mælum þrýsting á kistu
         if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
         {
-          updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+        //  updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
           previousMillis2 = millis(); // Endurstillum teljarann
         }
 
@@ -595,7 +596,7 @@ void adjustLFT()
       // Mælum þrýsting á kistu
       if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
       {
-        updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+        //updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
         previousMillis2 = millis(); // Endurstillum teljarann
       }
 
@@ -619,7 +620,7 @@ void adjustLFT()
           // Mælum þrýsting á kistu
           if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
           {
-            updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+           // updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
             previousMillis2 = millis(); // Endurstillum teljarann
           }
         }// Hækkun þrýstings fall lokar
@@ -656,7 +657,7 @@ void adjustRFT()
       // Mælum þrýsting á kistu
       if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
       {
-        updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+       // updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
         previousMillis2 = millis(); // Endurstillum teljarann
       }
 
@@ -680,7 +681,7 @@ void adjustRFT()
           // Mælum þrýsting á kistu
           if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
           {
-            updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+            //updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
             previousMillis2 = millis(); // Endurstillum teljarann
           }
         }// Hækkun þrýstings fall lokar
@@ -718,7 +719,7 @@ void adjustRRT()
       // Mælum þrýsting á kistu
       if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
       {
-        updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+       // updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
         previousMillis2 = millis(); // Endurstillum teljarann
       }
 
@@ -742,7 +743,7 @@ void adjustRRT()
           // Mælum þrýsting á kistu
           if(millis() - previousMillis2 > 1000) // Ef það er kominn tími til að mæla
           {
-            updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
+           // updateBaseValue(); // Uppfærum mælingu á kistu (Þetta er experimental)
             previousMillis2 = millis(); // Endurstillum teljarann
           }
         }// Hækkun þrýstings fall lokar
@@ -1221,7 +1222,7 @@ float readPressure()
   {
     pressure = 0;
   }
-  pressure = 2.00; // test!
+  //pressure = 2.00; // test!
   return pressure;
 } //readPressure fall lokar
 
@@ -1780,7 +1781,7 @@ void loop()
     {
       if((y > 40) && (y < 80))
       {
-        drawMain();
+        //drawMain();
       }
       if((y>160) && (y<240))
       {
@@ -1948,11 +1949,11 @@ void loop()
         {
           read_LRT(); // Lesum vinstra afturdekk
           updateValues(); // uppfærum gildi
-          //read_LFT(); // Lesum vinstra framdekk
+          read_LFT(); // Lesum vinstra framdekk
           updateValues(); // uppfærum gildi
           read_RFT(); // Lesum hægra framdekk
           updateValues(); // Uppfærum gildi
-          //read_RRT(); // Lesum hægra afturdekk
+          read_RRT(); // Lesum hægra afturdekk
           updateValues(); // Lesum gildi.
           //warningCheck(); // Athugum hvort eitthvað dekk sé í veseni.
           previousMillis1 = millis(); // Endurstillum teljara
